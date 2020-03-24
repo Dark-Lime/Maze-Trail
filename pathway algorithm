@@ -1,0 +1,41 @@
+    public void pathCalculator(String root, String endNode) {
+        if (nodeList.get(root) == null)
+            throw new IllegalArgumentException();
+
+        if (connectedNodes.get(nodeList.get(root)).size() == 0)
+            throw new IllegalArgumentException(root + " is not connected to anything.");
+
+        if (connectedNodes.get(nodeList.get(endNode)).size() == 0)
+            throw new IllegalArgumentException(endNode + " is not connected to anything.");
+
+        pathCalculator(nodeList.get(root), new HashSet<>(), nodeList.get(endNode));
+
+    }
+
+    //this method will do all the recursion work and one parameter will be a set to keep track of the depth traversal without duplicates
+    private void pathCalculator(Node root, Set<Node> visited, Node endNode) {
+
+        if (visited.size() == 0) {
+            System.out.println("To get from " + root + " to " + endNode);
+        }
+        route.push(root);
+        visited.add(root);
+        routeChecker(root, endNode, visited);
+
+
+
+        for (var node : connectedNodes.get(root)) {
+
+            if (visited.contains(endNode)) {
+                routeGetter(route);
+                backTracker.clear();
+                break;
+            }
+
+
+            if (!visited.contains(node)) {
+                backTracker.clear();
+                pathCalculator(node, visited, endNode);
+                }
+        }
+    }
